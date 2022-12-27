@@ -31,6 +31,7 @@ class MainViewModel @Inject constructor(
     private fun handleIntent() {
         viewModelScope.launch {
             userIntent.consumeAsFlow().collect {
+                // reducer
                 when (it) {
                     is MainIntent.FetchUsers -> fetchUser()
                 }
