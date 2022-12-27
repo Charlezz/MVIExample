@@ -3,7 +3,10 @@ package com.charlezz.mviexample.ui.view
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,14 +26,18 @@ import com.charlezz.mviexample.ui.model.MainState
  */
 @Composable
 fun MainScreen(
-    mainState: MainState,
+    state: MainState,
     onFetchClick: () -> Unit
 ) {
-    when (mainState) {
-        MainState.Idle -> EmptyScreen(onFetchClick)
-        MainState.Loading -> LoadingProgressBar()
-        is MainState.Users -> UserListScreen(mainState.user)
-        is MainState.Error -> EmptyScreen(onFetchClick)
+    if (state.users.isEmpty() || state.error != null) {
+        if(!state.loading){
+            EmptyScreen(onFetchClick)
+        }
+    } else {
+        UserListScreen(state.users)
+    }
+    if (state.loading) {
+        LoadingProgressBar()
     }
 
 }
@@ -91,7 +98,9 @@ fun UserListScreen(users: List<User>) {
                         }
 
                     }
-                    Divider(modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 2.dp))
+                    Divider(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp, vertical = 2.dp))
                 }
 
             }
