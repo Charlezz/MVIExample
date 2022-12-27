@@ -33,11 +33,7 @@ class MainActivity : ComponentActivity() {
                 Surface {
                     MainScreen(
                         state = mainViewModel.state.collectAsState().value,
-                        onFetchClick = {
-                            lifecycleScope.launch {
-                                mainViewModel.fetchUser()
-                            }
-                        }
+                        onFetchClick = { mainViewModel.fetchUser() }
                     )
                 }
             }

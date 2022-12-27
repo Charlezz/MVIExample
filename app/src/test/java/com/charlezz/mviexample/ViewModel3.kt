@@ -5,21 +5,25 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class CounterViewModel3 : CounterViewModel() {
+/**
+ * - 이벤트 처리를 통해 state 가 변경된다.
+ * - 외부 요인으로 state 변경 할 수 없음.
+ */
+class ViewModel3 : ViewModel() {
 
     private val events = Channel<Event>()
 
-    /**
-     * state 를 더이상 외부에서 수정하지 못함.
-     * 궁극적으로 이벤트 처리만을 통해 state 가 변경된다.
-     */
+    //state reducer
     override val state = events.receiveAsFlow()
         .runningFold(State(), ::reduceState)
         .stateIn(viewModelScope, SharingStarted.Eagerly, State())
 
     override fun onEvent(event: Event) {
-        events.trySend(event)
+        viewModelScope.launch {
+            events.send(event)
+        }
     }
 
     private fun reduceState(current: State, event: Event): State {
