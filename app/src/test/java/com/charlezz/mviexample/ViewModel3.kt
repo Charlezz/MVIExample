@@ -20,10 +20,8 @@ class ViewModel3 : ViewModel() {
         .runningFold(State(), ::reduceState)
         .stateIn(viewModelScope, SharingStarted.Eagerly, State())
 
-    override fun onEvent(event: Event) {
-        viewModelScope.launch {
-            events.send(event)
-        }
+    override suspend fun onEvent(event: Event) {
+        events.send(event)
     }
 
     private fun reduceState(current: State, event: Event): State {

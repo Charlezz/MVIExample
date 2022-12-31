@@ -11,10 +11,14 @@ class ViewModel1 :ViewModel(){
     private val _state = MutableStateFlow(State())
     override val state:StateFlow<State> = _state
 
-    override fun onEvent(event: Event) {
+    override suspend fun onEvent(event: Event) {
         when (event) {
-            is Event.Increment -> _state.update { it.copy(count = it.count + 1) }
-            is Event.Decrement -> _state.update { it.copy(count = it.count - 1) }
+            is Event.Increment -> {
+                _state.value = _state.value.copy(count = _state.value.count + 1)
+            }
+            is Event.Decrement -> {
+                _state.value = _state.value.copy(count = _state.value.count - 1)
+            }
         }
     }
 }

@@ -2,7 +2,6 @@ package com.charlezz.mviexample
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 /**
  * - Channel 을 도입하여 이벤트를 순차적으로 처리함 (Thread-safety)
@@ -22,10 +21,8 @@ class ViewModel2:ViewModel() {
             .launchIn(viewModelScope)
     }
 
-    override fun onEvent(event: Event) {
-        viewModelScope.launch {
-            events.send(event)
-        }
+    override suspend fun onEvent(event: Event) {
+        events.send(event)
     }
 
     private fun updateState(event: Event) {

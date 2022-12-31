@@ -15,51 +15,37 @@ class ViewModelTest{
     lateinit var viewModel: ViewModel
 
     @Before
-    fun setup(){
-        viewModel = ViewModel1()
+    fun setup() {
+        viewModel = ViewModel3()
     }
+
     @Test
-    fun countMustBeZero() = runBlocking{
-        val times = 100000
-        launch(newSingleThreadContext("Worker1")) {
-            repeat(times){
-                viewModel.onEvent(Event.Decrement)
+    fun countMustBeZero() {
+        println("# Test Started")
+        runBlocking {
+            println("# runBlocking Started")
+            val times = 100000
+            launch(newSingleThreadContext("Worker1")) {
+                println("Worker1 Started")
+                repeat(times) {
+//                        println("++")
+                    viewModel.onEvent(Event.Decrement)
+                }
+                println("Worker1 Finished")
             }
-        }
-        launch(newSingleThreadContext("Worker2")) {
-            repeat(times) {
-                viewModel.onEvent(Event.Increment)
-            }
+            launch(newSingleThreadContext("Worker2")) {
+                println("Worker2 Started")
+                repeat(times) {
+//                        println("--")
+                    viewModel.onEvent(Event.Increment)
+                }
+                println("Worker2 Finished")
+            }.join()
+            println("# runBlocking Finished")
         }
         assert(viewModel.state.value.count == 0) {
             println("count = ${viewModel.state.value.count}")
         }
-    }
-
-    @Test
-    fun allViewModelTest() = runBlocking {
-        val viewModels = listOf(
-            ViewModel1(),
-            ViewModel2(),
-            ViewModel3()
-        )
-
-        viewModels.forEachIndexed { index, viewModel ->
-            val times = 100000
-            launch(newSingleThreadContext("Worker1")) {
-                repeat(times) {
-                    viewModel.onEvent(Event.Decrement)
-                }
-            }
-            launch(newSingleThreadContext("Worker2")) {
-                repeat(times) {
-                    viewModel.onEvent(Event.Increment)
-                }
-            }
-
-            assert(if (viewModel is ViewModel1) viewModel.state.value.count != 0 else viewModel.state.value.count == 0) {
-                println("count = ${viewModel.state.value.count}")
-            }
-        }
+        println("## Test Finished")
     }
 }
