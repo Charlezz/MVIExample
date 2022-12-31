@@ -87,11 +87,11 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.2.2")
 
 
-//    def orbit_version = "4.4.0"
-//    implementation("org.orbit-mvi:orbit-core:$orbit_version")
-//    implementation("org.orbit-mvi:orbit-viewmodel:$orbit_version")
-//    implementation("org.orbit-mvi:orbit-compose:$orbit_version")
-//    testImplementation("org.orbit-mvi:orbit-test:$orbit_version")
+    def orbit_version = "4.5.0"
+    implementation("org.orbit-mvi:orbit-core:$orbit_version")
+    implementation("org.orbit-mvi:orbit-viewmodel:$orbit_version")
+    implementation("org.orbit-mvi:orbit-compose:$orbit_version")
+    testImplementation("org.orbit-mvi:orbit-test:$orbit_version")
 }
 
 // Allow references to generated code

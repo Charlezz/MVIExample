@@ -2,6 +2,7 @@ package com.charlezz.mviexample
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 /**
  * - Channel 을 도입하여 이벤트를 순차적으로 처리함 (Thread-safety)

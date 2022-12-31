@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mainViewModel.sideEffects
+        mainViewModel.container.sideEffectFlow
             .onEach { Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show() }
             .launchIn(lifecycleScope)
 
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
             MaterialTheme {
                 Surface {
                     MainScreen(
-                        state = mainViewModel.state.collectAsState().value,
+                        state = mainViewModel.container.stateFlow.collectAsState().value,
                         onFetchClick = { mainViewModel.fetchUser() }
                     )
                 }

@@ -9,40 +9,27 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
+import org.orbitmvi.orbit.syntax.simple.reduce
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: MainRepository
-) : ViewModel() {
+) : ViewModel(), ContainerHost<MainState, String> {
 
-    private val events = Channel<MainEvent>()
+    override val container: Container<MainState, String> = container(MainState())
 
-    val state: StateFlow<MainState> = events.receiveAsFlow()
-        .runningFold(MainState(), ::reduceState)
-        .stateIn(viewModelScope, SharingStarted.Eagerly, MainState())
-
-    private val _sideEffects = Channel<String>()
-
-    val sideEffects = _sideEffects.receiveAsFlow()
-
-    private fun reduceState(current: MainState,event:MainEvent):MainState{
-        return when(event){
-            MainEvent.Loading -> {
-                current.copy(loading = true)
-            }
-            is MainEvent.Loaded -> {
-                current.copy(loading = false, users = event.users)
-            }
-        }
-    }
-
-    fun fetchUser() {
+    fun fetchUser() = intent{
         viewModelScope.launch {
-            events.send(MainEvent.Loading)
+            reduce { state.copy(loading = true) }
             val users = repository.getUsers()
-            events.send(MainEvent.Loaded(users = users))
-            _sideEffects.send("${users.size} user(s) loaded")
+            reduce { state.copy(users = users, loading = false) }
+            postSideEffect("${users.size} user(s) loaded")
         }
     }
 
