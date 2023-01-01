@@ -27,8 +27,8 @@ class ViewModel2:ViewModel() {
 
     private fun updateState(event: Event) {
         when (event) {
-            is Event.Increment -> _state.update { it.copy(count = it.count + 1) }
-            is Event.Decrement -> _state.update { it.copy(count = it.count - 1) }
+            is Event.Increment -> _state.value = _state.value.copy(count = _state.value.count + 1)
+            is Event.Decrement -> _state.value = _state.value.copy(count = _state.value.count - 1)
         }
     }
 }

@@ -12,11 +12,11 @@ import org.junit.Test
 @OptIn(DelicateCoroutinesApi::class)
 class ViewModelTest{
 
-    lateinit var viewModel: ViewModel
+    private lateinit var viewModel: ViewModel
 
     @Before
     fun setup() {
-        viewModel = ViewModel3()
+        viewModel = ViewModel2()
     }
 
     @Test
@@ -28,7 +28,7 @@ class ViewModelTest{
             launch(newSingleThreadContext("Worker1")) {
                 println("Worker1 Started")
                 repeat(times) {
-//                        println("++")
+                    println("++")
                     viewModel.onEvent(Event.Decrement)
                 }
                 println("Worker1 Finished")
@@ -36,7 +36,7 @@ class ViewModelTest{
             launch(newSingleThreadContext("Worker2")) {
                 println("Worker2 Started")
                 repeat(times) {
-//                        println("--")
+                    println("--")
                     viewModel.onEvent(Event.Increment)
                 }
                 println("Worker2 Finished")
