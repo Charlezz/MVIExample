@@ -16,7 +16,7 @@ class ViewModelTest{
 
     @Before
     fun setup() {
-        viewModel = ViewModel2()
+        viewModel = ViewModel1()
     }
 
     @Test
@@ -28,7 +28,7 @@ class ViewModelTest{
             launch(newSingleThreadContext("Worker1")) {
                 println("Worker1 Started")
                 repeat(times) {
-                    println("++")
+//                    println("--")
                     viewModel.onEvent(Event.Decrement)
                 }
                 println("Worker1 Finished")
@@ -36,7 +36,7 @@ class ViewModelTest{
             launch(newSingleThreadContext("Worker2")) {
                 println("Worker2 Started")
                 repeat(times) {
-                    println("--")
+//                    println("++")
                     viewModel.onEvent(Event.Increment)
                 }
                 println("Worker2 Finished")
